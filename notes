@@ -1,0 +1,3 @@
+* Making UI Elements Visible and Invisisble *
+    - Example: Textview textView = (TextView) findViewById(R.id.textView);
+               textView.setVisibility(view.VISIBLE);
