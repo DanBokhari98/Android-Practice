@@ -1,5 +1,8 @@
 package com.example.danish.braintrainer;
 
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,13 +21,47 @@ public class MainActivity extends AppCompatActivity {
     TextView resultTextView;
     TextView pointsTextView;
     TextView sumTextView;
+    TextView timerTextView;
     Button button0;
     Button button1;
     Button button2;
     Button button3;
+    Button playAgainButton;
     int locationOFCorrectAnswer;
     int score = 0;
     int numberOfQuestions = 0;
+    Boolean activeGame = false;
+    ConstraintLayout gameLayout;
+
+
+    public void playAgain(View view){
+        activeGame = true;
+        generateQuestions();
+        score = 0;
+        numberOfQuestions = 0;
+        timerTextView.setText("30s");
+        pointsTextView.setText("0/0");
+        resultTextView.setText("");
+        playAgainButton.setVisibility(view.INVISIBLE);
+
+        new CountDownTimer(30100, 1000){
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timerTextView.setText(String.valueOf(millisUntilFinished/1000) + "s");
+            }
+
+            @Override
+            public void onFinish() {
+                activeGame = false;
+                playAgainButton.setVisibility(View.VISIBLE);
+                timerTextView.setText("0s");
+                resultTextView.setText("Your score: " +  Integer.toString(score) + "/" + Integer.toString(numberOfQuestions));
+            }
+        }.start();
+
+    }
+
 
 
     public void generateQuestions(){
@@ -56,6 +93,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void chooseAnswer(View view){
+
+//        if(!activeGame){
+//
+//        }
+
         if(view.getTag().toString().equals(Integer.toString(locationOFCorrectAnswer))){
             score++;
             resultTextView.setText("Correct!");
@@ -69,7 +111,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void start(View view){
-
+        startButton.setVisibility(view.INVISIBLE);
+        gameLayout.setVisibility(ConstraintLayout.VISIBLE);
     }
 
 
@@ -83,8 +126,12 @@ public class MainActivity extends AppCompatActivity {
         button1 = (Button)findViewById(R.id.button1);
         button2 = (Button)findViewById(R.id.button2);
         button3 = (Button)findViewById(R.id.button3);
+        playAgainButton = (Button)findViewById(R.id.playAgainButton);
         resultTextView = (TextView)findViewById(R.id.resultTextView);
         pointsTextView = (TextView)findViewById(R.id.pointsTextView);
-        generateQuestions();
+        timerTextView = (TextView)findViewById(R.id.timerTextView);
+        gameLayout = (ConstraintLayout)findViewById(R.id.gameLayout);
+        playAgain(findViewById(R.id.playAgainButton));
+
     }
 }
