@@ -1,0 +1,73 @@
+package com.example.kingdomheartscountdown.databasedemo;
+
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+//        try{
+//            SQLiteDatabase historyDatabase = this.openOrCreateDatabase("History", MODE_PRIVATE, null);
+//
+//            historyDatabase.execSQL("CREATE TABLE IF NOT EXISTS history (name VARCHAR, detail VARCHAR)");
+//
+//            historyDatabase.execSQL("INSERT INTO history (name, detail) VALUES ('Moon landing', 'July 20 1969, One Giant Leap for Mankind')");
+//
+//            historyDatabase.execSQL("INSERT INTO history (name, detail) VALUES ('Great Depression', 'people were sad yo' )");
+//
+//            Cursor c = historyDatabase.rawQuery("SELECT * FROM history", null);
+//
+//            int nameIndex =  c.getColumnIndex("name");
+//            int detailIndex = c.getColumnIndex("detail");
+//            c.moveToFirst();
+//            while(c != null){
+//                Log.i("history", c.getString(nameIndex));
+//                Log.i("detail", c.getString(detailIndex));
+//                c.moveToNext();
+//            }
+//
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+
+
+        try{
+
+            SQLiteDatabase myDatabase = this.openOrCreateDatabase("Users", MODE_PRIVATE, null);
+
+            myDatabase.execSQL("CREATE TABLE IF NOT EXISTS users (name VARCHAR, age INT(3))");
+            myDatabase.execSQL("CREATE TABLE IF NOT EXISTS newUsers (name VARCHAR, age INT(3), id INTEGER PRIMARY KEY)");
+
+//            myDatabase.execSQL("INSERT INTO newUsers (name, age) VALUES ('Kristan', 21)");
+//            myDatabase.execSQL("INSERT INTO newUsers (name, age) VALUES ('Ralphie', 1)");
+//            myDatabase.execSQL("UPDATE users SET age = 2 WHERE name = 'Ralphie' LIMIT 1");
+//            myDatabase.execSQL("DELETE FROM users WHERE name = 'Kristan' LIMIT 1");
+//            myDatabase.execSQL("DELETE FROM users WHERE name = 'Ralphie'");
+//            myDatabase.execSQL("DELETE FROM newUsers WHERE id = 1");
+            Cursor c = myDatabase.rawQuery("SELECT * FROM newUsers", null);
+
+            int nameIndex = c.getColumnIndex("name");
+            int ageIndex = c.getColumnIndex("age");
+            int idIndex = c.getColumnIndex("id");
+
+            c.moveToFirst();
+            while(c != null){
+                Log.i("UserResult = name", c.getString(nameIndex));
+                Log.i("UserResult = age", Integer.toString(c.getInt(ageIndex)));
+                Log.i("UserResult = id", Integer.toString(c.getInt(idIndex)));
+                c.moveToNext();
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }
+}
